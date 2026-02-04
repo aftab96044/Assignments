@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Form Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #4f46e5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .status {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .weak { color: red; }
+    .medium { color: orange; }
+    .strong { color: green; }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #3b33b1;
+    }
+
+    .output {
+      margin-top: 20px;
+      background: #eef2f7;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    @media(max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JavaScript Demo</h1>
+
+  <div class="container">
+
+    <!-- Email Validation -->
+    <label for="email">Email Address:</label>
+    <input type="text" id="email" placeholder="Enter your email">
+    <div id="emailStatus" class="status"></div>
+
+    <!-- Password Strength -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter password">
+    <div id="passwordStatus" class="status"></div>
+
+    <!-- Cookie & Session Demo -->
+    <button id="showCookies">Show Cookies</button>
+    <button id="showSession">Show Session</button>
+
+    <div id="output" class="output"></div>
+
+  </div>
+
+  <script>
+    // -----------------------------
+    // 1. Email Validation
+    // -----------------------------
+    const emailInput = document.getElementById("email");
+    const emailStatus = document.getElementById("emailStatus");
+
+    emailInput.addEventListener("input", function() {
+      const email = emailInput.value;
+      // Simple regex for email validation
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+      if (email === "") {
+        emailStatus.textContent = "";
+      } else if (regex.test(email)) {
+        emailStatus.textContent = "Valid email ✔";
+        emailStatus.style.color = "green";
+      } else {
+        emailStatus.textContent = "Invalid email ✖";
+        emailStatus.style.color = "red";
+      }
+    });
+
+    // -----------------------------
+    // 2. Password Strength
+    // -----------------------------
+    const passwordInput = document.getElementById("password");
+    const passwordStatus = document.getElementById("passwordStatus");
+
+    passwordInput.addEventListener("input", function() {
+      const pwd = passwordInput.value;
+      let strength = 0;
+
+      if (pwd.length >= 6) strength++;
+      if (/[A-Z]/.test(pwd)) strength++;
+      if (/[0-9]/.test(pwd)) strength++;
+      if (/[@$!%*?&]/.test(pwd)) strength++;
+
+      if (pwd.length === 0) {
+        passwordStatus.textContent = "";
+      } else if (strength <= 1) {
+        passwordStatus.textContent = "Weak";
+        passwordStatus.className = "status weak";
+      } else if (strength === 2 || strength === 3) {
+        passwordStatus.textContent = "Medium";
+        passwordStatus.className = "status medium";
+      } else {
+        passwordStatus.textContent = "Strong";
+        passwordStatus.className = "status strong";
+      }
+    });
+
+    // -----------------------------
+    // 3. Cookies and Session
+    // -----------------------------
+    const outputDiv = document.getElementById("output");
+
+    // Set some example cookies and sessionStorage
+    document.cookie = "username=AftabShaikh; path=/";
+    document.cookie = "role=Student; path=/";
+    sessionStorage.setItem("sessionUser", "AftabShaikh");
+    sessionStorage.setItem("sessionRole", "Student");
+
+    document.getElementById("showCookies").addEventListener("click", function() {
+      const cookies = document.cookie;
+      outputDiv.innerHTML = `<strong>Cookies:</strong><br>${cookies || "No cookies found"}`;
+    });
+
+    document.getElementById("showSession").addEventListener("click", function() {
+      let sessionData = "";
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        const value = sessionStorage.getItem(key);
+        sessionData += `${key} = ${value}<br>`;
+      }
+      outputDiv.innerHTML = `<strong>Session Storage:</strong><br>${sessionData || "No session data found"}`;
+    });
+  </script>
+
+</body>
+</html>
